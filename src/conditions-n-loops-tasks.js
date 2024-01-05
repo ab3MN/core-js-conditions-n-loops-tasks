@@ -40,8 +40,7 @@ function isPositive(number) {
  */
 function getMaxNumber(a, b, c) {
   let res = a;
-  if (b > res) res = b;
-  if (c > res) res = b;
+  if (b > res || c > res) res = b;
   return res;
 }
 
@@ -122,8 +121,46 @@ function convertToRomanNumerals(/* num */) {
  *  '10,5'    => 'one zero point five'
  *  '1950.2'  => 'one nine five zero point two'
  */
-function convertNumberToString(/* numberStr */) {
-  throw new Error('Not implemented');
+
+function convertNumberToString(numberStr = '') {
+  const convertOneNubmerToString = (number) => {
+    switch (number) {
+      case '9':
+        return 'nine';
+      case '8':
+        return 'eight';
+      case '7':
+        return 'seven';
+      case '6':
+        return 'six';
+      case '5':
+        return 'five';
+      case '4':
+        return 'four';
+      case '3':
+        return 'three';
+      case '2':
+        return 'two';
+      case '1':
+        return 'one';
+      case '0':
+        return 'zero';
+      case '-':
+        return 'minus';
+      default:
+        return 'point';
+    }
+  };
+  const lastIndex = numberStr.length - 1;
+  let numberStrings = '';
+  for (let i = 0; i < numberStr.length; i += 1) {
+    if (i !== lastIndex) {
+      numberStrings += `${convertOneNubmerToString(numberStr[i])} `;
+    } else {
+      numberStrings += convertOneNubmerToString(numberStr[i]);
+    }
+  }
+  return numberStrings;
 }
 
 /**
@@ -138,8 +175,13 @@ function convertNumberToString(/* numberStr */) {
  *  '0123210'   => true
  *  'qweqwe'    => false
  */
-function isPalindrome(/* str */) {
-  throw new Error('Not implemented');
+function isPalindrome(str) {
+  let newStr = '';
+
+  for (let i = str.length - 1; i >= 0; i -= 1) {
+    newStr += str[i];
+  }
+  return newStr === str;
 }
 
 /**
