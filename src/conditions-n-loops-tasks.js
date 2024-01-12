@@ -366,9 +366,11 @@ function rotateMatrix(matrix) {
   const newMatrix = matrix;
   const first = Math.floor(matrix.length / 2);
   const last = matrix.length - 1;
+
   for (let i = 0; i < first; i += 1) {
     for (let j = i; j < last - i; j += 1) {
       const k = matrix[i][j];
+
       newMatrix[i][j] = matrix[last - j][i];
       newMatrix[last - j][i] = matrix[last - i][last - j];
       newMatrix[last - i][last - j] = matrix[j][last - i];
@@ -393,20 +395,47 @@ function rotateMatrix(matrix) {
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
 
-const sortByAsc = (arr) => {
-  const sortArr = arr;
-  for (let i = 0; i < arr.length; i += 1) {
-    let min = i;
-
-    for (let j = i + 1; j < arr.length; j += 1) {
-      if (arr[min] > arr[j]) {
-        min = j;
-      }
+const swap = (arr, leftIndex, rightIndex) => {
+  const sameArr = arr;
+  const temp = arr[leftIndex];
+  sameArr[leftIndex] = arr[rightIndex];
+  sameArr[rightIndex] = temp;
+};
+const partition = (items, left, right) => {
+  const pivot = items[Math.floor((right + left) / 2)];
+  let leftNumber = left;
+  let rightNumber = right;
+  while (leftNumber <= rightNumber) {
+    while (items[leftNumber] < pivot) {
+      leftNumber += 1;
     }
-    [sortArr[i], sortArr[min]] = [arr[min], arr[i]];
+    while (items[rightNumber] > pivot) {
+      rightNumber -= 1;
+    }
+    if (leftNumber <= rightNumber) {
+      swap(items, leftNumber, rightNumber);
+      leftNumber += 1;
+      rightNumber -= 1;
+    }
+  }
+  return leftNumber;
+};
+
+function sortByAsc(arr, left, right) {
+  const leftSide = !left ? 0 : left;
+  const rightSide = !right ? arr.length - 1 : right;
+  let index;
+  if (arr.length > 1) {
+    index = partition(arr, leftSide, rightSide);
+    if (leftSide < index - 1) {
+      sortByAsc(arr, leftSide, index - 1);
+    }
+    if (index < rightSide) {
+      sortByAsc(arr, index, rightSide);
+    }
   }
   return arr;
-};
+}
 
 /**
  * Shuffles characters in a string so that the characters with an odd index are moved to the end of the string at each iteration.
